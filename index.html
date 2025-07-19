@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Senpai Quiz Clan — Registration</title>
+  <meta name="description" content="Registration form for Senpai Quiz Clan">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            discord: '#5865F2',
+            discordLight: '#7289da',
+            darkBg: '#050509',
+            inputBg: 'rgba(255, 255, 255, 0.08)',
+            borderColor: 'rgba(255, 255, 255, 0.1)',
+            textLight: '#c7d1ff'
+          },
+          animation: {
+            shimmer: 'shimmer 60s linear infinite',
+            floatDots: 'floatDots 20s linear infinite',
+            gradient: 'gradientAnimation 15s ease infinite'
+          },
+          keyframes: {
+            shimmer: {
+              '0%': { 'background-position': '0 0' },
+              '100%': { 'background-position': '1000px 1000px' }
+            },
+            floatDots: {
+              '0%': { transform: 'translateY(0)', opacity: '1' },
+              '100%': { transform: 'translateY(-100vh)', opacity: '0' }
+            },
+            gradientAnimation: {
+              '0%': { 'background-position': '0% 50%' },
+              '50%': { 'background-position': '100% 50%' },
+              '100%': { 'background-position': '0% 50%' }
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style type="text/tailwindcss">
+    @layer utilities {
+      .glow-background {
+        background: radial-gradient(circle, rgba(114,137,218,0.06) 1px, transparent 1px);
+        background-size: 40px 40px;
+      }
+      .mouse-glow {
+        background: radial-gradient(circle, rgba(255,255,255,0.06) 0%, transparent 80%);
+      }
+      .animated-bg {
+        background: linear-gradient(270deg, rgba(66, 165, 245, 0.04), rgba(114,137,218,0.06));
+        background-size: 400% 400%;
+      }
+    }
+  </style>
+</head>
+<body class="font-['Poppins'] min-h-screen bg-darkBg text-white flex items-center justify-center flex-col p-5 relative overflow-hidden">
+  <!-- Background elements -->
+  <div class="animated-bg absolute top-0 left-0 w-full h-full animate-gradient pointer-events-none z-0"></div>
+  <div class="glow-background absolute top-0 left-0 w-full h-full animate-shimmer pointer-events-none z-0"></div>
+  <div class="dot-background absolute top-0 left-0 w-full h-full pointer-events-none z-[1]" id="dotContainer"></div>
+  <div class="mouse-light fixed top-0 left-0 w-screen h-screen pointer-events-none z-0">
+    <div class="mouse-glow w-[400px] h-[400px] rounded-full absolute pointer-events-none -translate-x-1/2 -translate-y-1/2" id="glow"></div>
+  </div>
+
+  <!-- Form container -->
+  <div class="relative z-[2] bg-white/5 backdrop-blur-sm rounded-2xl border border-white/10 p-10 w-full max-w-[650px] shadow-lg shadow-discord/20 hover:shadow-discord/40 transition-all duration-300 hover:shadow-xl">
+    <h2 class="text-center mb-2.5 text-discordLight text-2xl font-semibold">Senpai Quiz Clan — Registration</h2>
+    <form id="quizForm" enctype="multipart/form-data" class="mt-4">
+      <label for="name" class="block mt-5 mb-2 font-semibold text-textLight">What is your full name *</label>
+      <input type="text" id="name" name="name" required class="w-full px-3 py-3 bg-inputBg border border-borderColor rounded-xl text-white text-base transition-all duration-300 focus:outline-none focus:border-discordLight focus:shadow-md focus:shadow-discord/50" />
+
+      <label for="discord" class="block mt-5 mb-2 font-semibold text-textLight">What is your Discord username *</label>
+      <input type="text" id="discord" name="discord" required class="w-full px-3 py-3 bg-inputBg border border-borderColor rounded-xl text-white text-base transition-all duration-300 focus:outline-none focus:border-discordLight focus:shadow-md focus:shadow-discord/50" />
+
+      <label for="sender" class="block mt-5 mb-2 font-semibold text-textLight">From which number did you send the entry fee (bkash or nagad)*</label>
+      <input type="tel" id="sender" name="sender" required class="w-full px-3 py-3 bg-inputBg border border-borderColor rounded-xl text-white text-base transition-all duration-300 focus:outline-none focus:border-discordLight focus:shadow-md focus:shadow-discord/50" />
+
+      <label for="referral" class="block mt-5 mb-2 font-semibold text-textLight">Referred by (if any)</label>
+      <input type="text" id="referral" name="referral" class="w-full px-3 py-3 bg-inputBg border border-borderColor rounded-xl text-white text-base transition-all duration-300 focus:outline-none focus:border-discordLight focus:shadow-md focus:shadow-discord/50" />
+
+      <label for="screenshot" class="block mt-5 mb-2 font-semibold text-textLight">Upload payment screenshot *</label>
+      <input type="file" id="screenshot" name="screenshot" accept="image/*" required class="w-full px-3 py-3 bg-inputBg border border-borderColor rounded-xl text-white text-base transition-all duration-300 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-discord file:text-white hover:file:bg-discordLight" />
+
+      <button type="submit" class="submit-btn mt-7 w-full py-3.5 text-lg font-bold text-white bg-gradient-to-br from-discord to-discordLight rounded-xl shadow-lg shadow-discord/60 hover:shadow-discord/100 hover:-translate-y-0.5 transition-all duration-300">Submit</button>
+    </form>
+  </div>
+
+  <script>
+    // Create floating dots
+    const dotContainer = document.getElementById('dotContainer');
+    for (let i = 0; i < 100; i++) {
+      const dot = document.createElement('div');
+      dot.className = 'dot absolute w-0.5 h-0.5 bg-white/30 rounded-full animate-floatDots';
+      dot.style.top = `${Math.random() * 100}%`;
+      dot.style.left = `${Math.random() * 100}%`;
+      dot.style.animationDuration = `${10 + Math.random() * 20}s`;
+      dotContainer.appendChild(dot);
+    }
+
+    // Interactive mouse glow
+    const glow = document.getElementById('glow');
+    document.addEventListener('mousemove', (e) => {
+      glow.style.left = `${e.clientX}px`;
+      glow.style.top = `${e.clientY}px`;
+    });
+  </script>
+</body>
+</html>
