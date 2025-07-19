@@ -6,6 +6,7 @@
   <title>Senpai Quiz Clan — Registration</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
   <style>
+    /* ... (Your existing CSS remains the same) ... */
     * {
       box-sizing: border-box;
       margin: 0;
@@ -151,7 +152,8 @@
 
     input[type="text"],
     input[type="tel"],
-    input[type="file"] {
+    input[type="file"],
+    select {
       width: 100%;
       padding: 12px;
       background: rgba(255, 255, 255, 0.08);
@@ -162,7 +164,7 @@
       transition: 0.3s ease;
     }
 
-    input:focus {
+    input:focus, select:focus {
       outline: none;
       border: 1px solid #7289da;
       box-shadow: 0 0 12px #7289da;
@@ -194,6 +196,21 @@
                   0 0 60px rgba(66, 165, 245, 0.5),
                   0 0 100px rgba(66, 165, 245, 0.4);
     }
+
+    .message {
+        text-align: center;
+        margin-top: 20px;
+        font-size: 1.1em;
+        display: none;
+    }
+
+    .message.success {
+        color: #4caf50;
+    }
+
+    .message.error {
+        color: #f44336;
+    }
   </style>
 </head>
 <body>
@@ -203,27 +220,36 @@
   <div class="mouse-light"><div class="mouse-glow" id="glow"></div></div>
   <div class="form-container">
     <h2>Senpai Quiz Clan — Registration</h2>
-    <form id="quizForm" enctype="multipart/form-data">
+    <form id="quizForm">
       <label for="name">What is your full name *</label>
       <input type="text" id="name" name="name" required />
 
       <label for="discord">What is your Discord username *</label>
       <input type="text" id="discord" name="discord" required />
 
-      <label for="sender">From which number did you send the entry fee (bkash or nagad)*</label>
+      <label for="payment">Payment Method *</label>
+      <select id="payment" name="payment" required>
+        <option value="" disabled selected>Select a payment method</option>
+        <option value="bKash">bKash</option>
+        <option value="Nagad">Nagad</option>
+      </select>
+
+      <label for="sender">From which number did you send the entry fee *</label>
       <input type="tel" id="sender" name="sender" required />
 
       <label for="referral">Referred by (if any)</label>
       <input type="text" id="referral" name="referral" />
 
       <label for="screenshot">Upload payment screenshot *</label>
-      <input type="file" id="screenshot" name="screenshot" accept="image/*" required />
+      <input type="file" id="screenshot" name="screenshot" accept="image/jpeg, image/png, image/webp" required />
 
       <button class="submit-btn" type="submit">Submit</button>
     </form>
+    <div id="message" class="message"></div>
   </div>
 
   <script>
+    // ... (Your existing animation scripts remain the same) ...
     for (let i = 0; i < 100; i++) {
       const dot = document.createElement('div');
       dot.className = 'dot';
@@ -238,6 +264,44 @@
     document.addEventListener('mousemove', (e) => {
       glow.style.left = e.clientX + 'px';
       glow.style.top = e.clientY + 'px';
+    });
+
+    // Form submission handling
+    const form = document.getElementById('quizForm');
+    const messageDiv = document.getElementById('message');
+    const submitBtn = document.querySelector('.submit-btn');
+
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Submitting...';
+
+        const formData = new FormData(form);
+
+        try {
+            const response = await fetch('/submit', {
+                method: 'POST',
+                body: formData,
+            });
+
+            const result = await response.json();
+
+            if (response.ok) {
+                messageDiv.textContent = result.message;
+                messageDiv.className = 'message success';
+                form.reset();
+            } else {
+                messageDiv.textContent = result.message || 'An unknown error occurred.';
+                messageDiv.className = 'message error';
+            }
+        } catch (error) {
+            messageDiv.textContent = 'A network error occurred. Please try again.';
+            messageDiv.className = 'message error';
+        } finally {
+            messageDiv.style.display = 'block';
+            submitBtn.disabled = false;
+            submitBtn.textContent = 'Submit';
+        }
     });
   </script>
 </body>
