@@ -1,19 +1,17 @@
 {
-  "name": "senpai-quiz-clan",
+  "name": "senpai-quiz-clan-server",
   "version": "1.0.0",
-  "description": "Senpai Quiz Clan Registration Backend",
+  "description": "Backend for Senpai Quiz Clan registration form",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
   },
   "dependencies": {
-    "axios": "^1.6.0",
-    "dotenv": "^16.0.3",
+    "axios": "^1.6.7",
+    "dotenv": "^16.3.1",
     "express": "^4.18.2",
-    "googleapis": "^118.0.0",
+    "form-data": "^4.0.0",
+    "googleapis": "^133.0.0",
     "multer": "^1.4.5-lts.1"
-  },
-  "engines": {
-    "node": ">=18"
   }
 }
